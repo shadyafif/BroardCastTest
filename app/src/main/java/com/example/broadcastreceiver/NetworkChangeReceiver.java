@@ -5,25 +5,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
-import static android.content.ContentValues.TAG;
-
+import android.widget.Toast;
 
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
+
+
     @Override
     public void onReceive(Context context, Intent intent) {
         final ConnectivityManager cManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert cManager != null;
         NetworkInfo nInfo = cManager.getActiveNetworkInfo();
         if (nInfo != null && nInfo.isConnected()) {
-            Log.d(TAG, "onReceive: " + "Network good");
+            Toast.makeText(context, "You're online", Toast.LENGTH_SHORT).show();
 
         } else {
-
-            Log.d(TAG, "onReceive: " + "Network failed");
-
+            Toast.makeText(context, "You're offline", Toast.LENGTH_SHORT).show();
         }
     }
 }
