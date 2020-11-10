@@ -3,35 +3,48 @@ package com.example.broadcastreceiver;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    Context _mContext;
-    BroadcastReceiver br = null;
+
+
+    BroadcastReceiver br;
     IntentFilter filter;
+    Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Init views
+        btn = findViewById(R.id.button);
         br = new NetworkChangeReceiver();
-        filter = new IntentFilter();
-        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        _mContext = getApplicationContext();
-        _mContext.registerReceiver(br, filter);
+        filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+
+        // Go to second activity
+        btn.setOnClickListener(view ->
+                startActivity(new Intent(MainActivity.this, SecondActivity.class)));
     }
 
+
     @Override
-    protected void onStart() {
-        super.onStart();
-        br = new NetworkChangeReceiver();
-        filter = new IntentFilter();
-        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        _mContext = getApplicationContext();
-        _mContext.registerReceiver(br, filter);
+    protected void onResume() {
+        super.onResume();
+        // Check internet connection
+        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+        this.registerReceiver(br, filter);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister broad cast receiver to avoid memory leaks
+        unregisterReceiver(br);
     }
 }
