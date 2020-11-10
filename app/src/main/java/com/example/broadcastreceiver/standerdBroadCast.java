@@ -9,19 +9,19 @@ import android.net.ConnectivityManager;
 public class standerdBroadCast {
 
 
-    Context context;
+   Context context;
 
-    public standerdBroadCast(Context context) {
+    public  standerdBroadCast(Context context) {
         this.context = context;
     }
 
-    public void RegisterRecevir(BroadcastReceiver broadcastReceiver, IntentFilter intentFilter) {
+    public static void RegisterRecevir(Context context,BroadcastReceiver broadcastReceiver, IntentFilter intentFilter) {
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         context.registerReceiver(broadcastReceiver, intentFilter);
     }
 
-    public void unregisterReceiver(BroadcastReceiver broadcastReceiver) {
+    public static void unregisterReceiver(Context context,BroadcastReceiver broadcastReceiver) {
        context.unregisterReceiver(broadcastReceiver);
     }
 }
