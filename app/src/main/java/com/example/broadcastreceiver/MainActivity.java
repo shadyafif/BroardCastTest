@@ -9,12 +9,14 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.widget.Button;
 
+
 public class MainActivity extends AppCompatActivity {
 
 
     BroadcastReceiver br;
     IntentFilter filter;
     Button btn;
+    standerdBroadCast standerdBroadCast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         btn = findViewById(R.id.button);
         br = new NetworkChangeReceiver();
         filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        standerdBroadCast = new standerdBroadCast(this);
 
         // Go to second activity
         btn.setOnClickListener(view ->
@@ -36,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Check internet connection
-        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
-        this.registerReceiver(br, filter);
+//        filter.addAction(Intent.ACTION_AIRPLANE_MODE_CHANGED);
+//        this.registerReceiver(br, filter);
+        standerdBroadCast.RegisterRecevir(br, filter);
+
     }
 
 
@@ -45,6 +50,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         // Unregister broad cast receiver to avoid memory leaks
-        unregisterReceiver(br);
+        standerdBroadCast.unregisterReceiver(br);
     }
 }
